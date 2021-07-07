@@ -5,3 +5,7 @@ node_modules
 env.json
 
 .idea
+
+/tes.bk/
+
+samconfig.toml
