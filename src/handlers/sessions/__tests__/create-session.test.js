@@ -18,7 +18,7 @@ describe('Test create session', function () {
         putSpy.mockRestore();
     });
 
-    it('should add uid to the table', async () => {
+    it('should able to store the session id', async () => {
         const returnedItem = {
             uid: '17790668-df61-11eb-ba80-0242ac130004',
         };

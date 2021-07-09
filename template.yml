@@ -30,6 +30,24 @@ Resources:
             Path: /session
             Method: POST
 
+  createSecret:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: src/handlers/secrets/
+      Handler: create.handler
+      Description: To create a secret for a user
+      Environment:
+        Variables:
+          SECRET_TABLE: !Ref SecretTable
+      Layers:
+        - !Ref NodePackages
+      Events:
+        Api:
+          Type: Api
+          Properties:
+            Path: /secret
+            Method: POST
+
   NodePackages:
     Type: AWS::Serverless::LayerVersion
     Properties:
@@ -66,6 +84,16 @@ Resources:
     Properties:
       PrimaryKey:
         Name: uid
+        Type: String
+      ProvisionedThroughput:
+        ReadCapacityUnits: 2
+        WriteCapacityUnits: 2
+
+  SecretTable:
+    Type: AWS::Serverless::SimpleTable
+    Properties:
+      PrimaryKey:
+        Name: uri
         Type: String
       ProvisionedThroughput:
         ReadCapacityUnits: 2

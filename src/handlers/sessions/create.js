@@ -12,12 +12,10 @@ exports.handler = async (event) => {
         uid: uuidv4()
     }
 
-    const params = {
+    await docClient.put({
         TableName: sessionTable,
         Item: item
-    };
-
-    await docClient.put(params).promise();
+    }).promise();
 
     const response = {
         statusCode: 200,
@@ -25,5 +23,6 @@ exports.handler = async (event) => {
     };
 
     console.info(`response from: ${event.path} statusCode: ${response.statusCode} body: ${response.body}`);
+
     return response;
 }
