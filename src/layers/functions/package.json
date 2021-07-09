@@ -1,12 +1,11 @@
 {
-  "name": "sessions",
+  "name": "functions",
   "version": "1.0.0",
   "description": "",
-  "main": "create.js",
+  "main": "utils.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "",
-  "license": "ISC",
-  "dependencies": {}
+  "license": "ISC"
 }

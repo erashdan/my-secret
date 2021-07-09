@@ -6,11 +6,6 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "jest": {
-    "modulePaths": [
-      "<rootDir>/../../dependencies/nodejs/node_modules/"
-    ]
-  },
   "author": "",
   "license": "ISC",
   "dependencies": {}
