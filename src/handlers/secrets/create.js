@@ -2,11 +2,14 @@ const dynamodb = require('aws-sdk/clients/dynamodb');
 const docClient = new dynamodb.DocumentClient();
 const secretTable = process.env.SECRET_TABLE;
 const cuid = require('cuid');
+const {toLowerCase} = require('/opt/utils');
 
 exports.handler = async (event) => {
     if (event.httpMethod !== 'POST') {
         throw new Error(`postMethod only accepts POST method, you tried: ${event.httpMethod} method.`);
     }
+
+    event.headers = toLowerCase(event.headers)
 
     let body = JSON.parse(event.body)
 
@@ -22,7 +25,7 @@ exports.handler = async (event) => {
         }
     }
 
-    if (!body.body) {
+    if (!body || !body.body) {
         return {
             statusCode: 422,
             body: JSON.stringify({

@@ -41,6 +41,7 @@ Resources:
           SECRET_TABLE: !Ref SecretTable
       Layers:
         - !Ref NodePackages
+        - !Ref UtilsLayer
       Events:
         Api:
           Type: Api
@@ -53,32 +54,17 @@ Resources:
     Properties:
       LayerName: my-secret-app-dependencies
       Description: All shared node packages cross lambdas
-      ContentUri: src/dependencies/
+      ContentUri: src/layers/dependencies/
       RetentionPolicy: Retain
 
-#  putItemFunction:
-#    Type: AWS::Serverless::Function
-#    Properties:
-#      Handler: src/handlers/put-item.putItemHandler
-#      Runtime: nodejs14.x
-#      MemorySize: 128
-#      Timeout: 100
-#      Description: A simple example includes a HTTP post method to add one item to a DynamoDB table.
-#      Policies:
-#        # Give Create/Read/Update/Delete Permissions to the SampleTable
-#        - DynamoDBCrudPolicy:
-#            TableName: !Ref SampleTable
-#      Environment:
-#        Variables:
-#          # Make table name accessible as environment variable from function code during execution
-#          SAMPLE_TABLE: !Ref SampleTable
-#      Events:
-#        Api:
-#          Type: Api
-#          Properties:
-#            Path: /
-#            Method: POST
-#
+  UtilsLayer:
+    Type: AWS::Serverless::LayerVersion
+    Properties:
+      LayerName: my-secret-app-dependencies
+      Description: Get the shared utils for cross lambdas
+      ContentUri: src/layers/functions/
+      RetentionPolicy: Retain
+
   SessionTable:
     Type: AWS::Serverless::SimpleTable
     Properties:

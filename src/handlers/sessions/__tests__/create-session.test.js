@@ -1,5 +1,4 @@
 const lambda = require('../create.js');
-
 const dynamodb = require('aws-sdk/clients/dynamodb');
 
 jest.mock('uuid', () => {

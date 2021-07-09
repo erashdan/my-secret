@@ -32,6 +32,7 @@ describe('Test create secret', function () {
                 }]
             })
         };
+
         expect(result).toEqual(expectedResult);
     })
 
