@@ -49,6 +49,22 @@ Resources:
             Path: /secret
             Method: POST
 
+  checkSecret:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: src/handlers/secrets/
+      Handler: check.handler
+      Description: To check if the secret is exist and not opened
+      Environment:
+        Variables:
+          SECRET_TABLE: !Ref SecretTable
+      Events:
+        Api:
+          Type: Api
+          Properties:
+            Path: /secret/{uri}/check
+            Method: GET
+
   NodePackages:
     Type: AWS::Serverless::LayerVersion
     Properties:
