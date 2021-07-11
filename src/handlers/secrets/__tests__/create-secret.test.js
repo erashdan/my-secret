@@ -78,7 +78,8 @@ describe('Test create secret', function () {
         const expectedResult = {
             statusCode: 201,
             body: JSON.stringify({
-                'uri': 'my-uri-test'
+                'uri': 'my-uri-test',
+                'body': 'My Secret !'
             })
         };
         expect(result).toEqual(expectedResult);

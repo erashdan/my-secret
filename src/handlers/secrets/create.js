@@ -38,7 +38,8 @@ exports.handler = async (event) => {
     }
 
     const item = {
-        uri: cuid()
+        uri: cuid(),
+        body: body.body
     }
 
     await docClient.put({
