@@ -1,6 +1,6 @@
 # My Secret App
 
-This is practice project for AWS SAM / DynamoDB / KMS
+This is workshop project for AWS SAM / DynamoDB / KMS
 
 Created using AWS SAM framework
 
@@ -12,7 +12,6 @@ chmod +x install.sh
 ```
 
 - Make sure to create [Dyanmodb](https://console.aws.amazon.com/dynamodb/) on the AWS Cloud
-
 
 ### Unit test
 - Run `install.sh` 
