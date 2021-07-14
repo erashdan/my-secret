@@ -10,8 +10,6 @@ exports.handler = async (event) => {
 
     const data = await docClient.get(tableQuery).promise();
 
-    console.log('data', data)
-
     if (!data.Item) {
         return {
             statusCode: 404,

@@ -65,6 +65,22 @@ Resources:
             Path: /secret/{uri}/check
             Method: GET
 
+  deleteSecret:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: src/handlers/secrets/
+      Handler: delete.handler
+      Description: To delete the secret from database
+      Environment:
+        Variables:
+          SECRET_TABLE: !Ref SecretTable
+      Events:
+        Api:
+          Type: Api
+          Properties:
+            Path: /secret/{uri}
+            Method: DELETE
+
   NodePackages:
     Type: AWS::Serverless::LayerVersion
     Properties:
