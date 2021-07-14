@@ -10,6 +10,9 @@ Globals:
     Timeout: 100
     Runtime: nodejs14.x
     MemorySize: 128
+    Environment:
+      Variables:
+        SECRET_TABLE: !Ref SecretTable
 
 Resources:
   createSession:
@@ -36,9 +39,6 @@ Resources:
       CodeUri: src/handlers/secrets/
       Handler: create.handler
       Description: To create a secret for a user
-      Environment:
-        Variables:
-          SECRET_TABLE: !Ref SecretTable
       Layers:
         - !Ref NodePackages
         - !Ref UtilsLayer
@@ -55,14 +55,24 @@ Resources:
       CodeUri: src/handlers/secrets/
       Handler: check.handler
       Description: To check if the secret is exist and not opened
-      Environment:
-        Variables:
-          SECRET_TABLE: !Ref SecretTable
       Events:
         Api:
           Type: Api
           Properties:
             Path: /secret/{uri}/check
+            Method: GET
+
+  viewSecret:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: src/handlers/secrets/
+      Handler: view.handler
+      Description: To view the secret
+      Events:
+        Api:
+          Type: Api
+          Properties:
+            Path: /secret/{uri}
             Method: GET
 
   deleteSecret:
@@ -71,9 +81,6 @@ Resources:
       CodeUri: src/handlers/secrets/
       Handler: delete.handler
       Description: To delete the secret from database
-      Environment:
-        Variables:
-          SECRET_TABLE: !Ref SecretTable
       Events:
         Api:
           Type: Api

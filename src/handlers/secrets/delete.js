@@ -8,33 +8,7 @@ exports.handler = async (event) => {
         Key: {uri: event.pathParameters.uri}
     };
 
-    console.log(JSON.stringify(tableQuery))
-
-    const data = await docClient.delete(tableQuery).promise();
-
-    // if (!data.Item) {
-    //     return {
-    //         statusCode: 404,
-    //         body: JSON.stringify({
-    //             errors: [{
-    //                 key: 'uri',
-    //                 error: 'The URI is not exist.'
-    //             }]
-    //         })
-    //     }
-    // }
-
-    // const item = data.Item;
-
-    // console.log('item', JSON.stringify(item));
-
-
-    // if (item.body === '') {
-    //     return {
-    //         statusCode: 204,
-    //         body: JSON.stringify({})
-    //     }
-    // }
+    await docClient.delete(tableQuery).promise();
 
     return {
         statusCode: 200,
