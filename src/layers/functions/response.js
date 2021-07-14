@@ -1,3 +1,5 @@
+const ResponseException = require('/opt/ResponseException')
+
 let response = {
     statusCode: 200,
     headers: {
@@ -7,6 +9,17 @@ let response = {
         'Access-Control-Allow-Methods': '*'
     },
     body: {},
+
+    init() {
+        this.statusCode = 200
+        this.headers = {
+            'accept': 'application/json',
+            'Access-Control-Allow-Origin': '*',
+            'Access-Control-Allow-Headers': '*',
+            'Access-Control-Allow-Methods': '*'
+        }
+        this.body = {}
+    },
 
     handle(body = null) {
         if (body !== null) {
@@ -21,13 +34,21 @@ let response = {
     },
 
     handleException(exception) {
-        this.statusCode = exception.statusCode
-        this.body = {
-            errors: [
-                exception.errorMessage
-            ]
+        if (exception instanceof ResponseException) {
+            this.statusCode = exception.statusCode
+            this.body = {
+                errors: [
+                    exception.errorMessage
+                ]
+            }
+        } else {
+            this.statusCode = 500
+            this.body = {
+                errors: [
+                    exception.errorMessage
+                ]
+            }
         }
-
         return this.handle()
     }
 }

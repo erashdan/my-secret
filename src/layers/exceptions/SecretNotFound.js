@@ -2,7 +2,7 @@ const ResponseException = require('./ResponseException')
 
 class SecretNotFound extends ResponseException {
     statusCode = 404
-    errorException = 'Secret URI not found'
+    errorMessage = 'The URI is not exist'
 }
 
 module.exports = SecretNotFound

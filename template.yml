@@ -10,6 +10,9 @@ Globals:
     Timeout: 100
     Runtime: nodejs14.x
     MemorySize: 128
+    Layers:
+      - !Ref UtilsLayer
+      - !Ref ExceptionsLayer
     Environment:
       Variables:
         SECRET_TABLE: !Ref SecretTable
@@ -41,7 +44,6 @@ Resources:
       Description: To create a secret for a user
       Layers:
         - !Ref NodePackages
-        - !Ref UtilsLayer
       Events:
         Api:
           Type: Api
@@ -102,6 +104,14 @@ Resources:
       LayerName: my-secret-app-dependencies
       Description: Get the shared utils for cross lambdas
       ContentUri: src/layers/functions/
+      RetentionPolicy: Retain
+
+  ExceptionsLayer:
+    Type: AWS::Serverless::LayerVersion
+    Properties:
+      LayerName: my-secret-exception-classes
+      Description: The exceptions thats exist in secret app
+      ContentUri: src/layers/exceptions/
       RetentionPolicy: Retain
 
   SessionTable:
