@@ -25,11 +25,16 @@ describe('Test create secret', function () {
 
         const expectedResult = {
             statusCode: 422,
+            headers: {
+                'accept': 'application/json',
+                'Access-Control-Allow-Origin': '*',
+                'Access-Control-Allow-Headers': '*',
+                'Access-Control-Allow-Methods': '*'
+            },
             body: JSON.stringify({
-                errors: [{
-                    key: 'body',
-                    error: 'The body is required.'
-                }]
+                errors: [
+                    'The body is required'
+                ]
             })
         };
 
@@ -54,6 +59,12 @@ describe('Test create secret', function () {
 
         const expectedResult = {
             statusCode: 201,
+            headers: {
+                'accept': 'application/json',
+                'Access-Control-Allow-Origin': '*',
+                'Access-Control-Allow-Headers': '*',
+                'Access-Control-Allow-Methods': '*'
+            },
             body: JSON.stringify({
                 'uri': 'my-uri-test',
                 'body': 'My Secret !'

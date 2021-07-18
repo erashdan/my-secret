@@ -65,7 +65,6 @@ Resources:
             Path: /secret/{secret}
             Method: GET
 
-
   createSecret:
     Type: AWS::Serverless::Function
     Properties:

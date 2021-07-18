@@ -10,6 +10,10 @@ let response = {
     },
     body: {},
 
+    setStatusCode(statusCode) {
+        this.statusCode = statusCode
+    },
+
     handle(body = null) {
         if (body !== null) {
             this.body = body

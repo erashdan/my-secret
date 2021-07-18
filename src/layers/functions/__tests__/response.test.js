@@ -77,4 +77,25 @@ describe('Test response object', function () {
 
         expect(actualResponse).toEqual(exceptedResponse);
     })
+
+    it('should set the status code by a function in response object', async () => {
+        let response = {}
+        Object.assign(response, responseObject)
+
+        response.setStatusCode(201)
+        let actualResponse = response.handle({})
+
+        const exceptedResponse = {
+            statusCode: 201,
+            headers: {
+                'accept': 'application/json',
+                'Access-Control-Allow-Origin': '*',
+                'Access-Control-Allow-Headers': '*',
+                'Access-Control-Allow-Methods': '*'
+            },
+            body: JSON.stringify({})
+        }
+
+        expect(actualResponse).toEqual(exceptedResponse);
+    })
 });
