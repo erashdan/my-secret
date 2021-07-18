@@ -17,7 +17,7 @@ describe('Test create secret', function () {
     it('should return 422 if the body is empty', async () => {
         let event = {
             httpMethod: 'POST',
-            headers: {'x-session-id': '12345-88823-231231'},
+            headers: {},
             body: JSON.stringify({})
         }
 
@@ -36,33 +36,10 @@ describe('Test create secret', function () {
         expect(result).toEqual(expectedResult);
     })
 
-    it('should return 400 if the x-session-id is empty', async () => {
-        let event = {
-            httpMethod: 'POST',
-            headers: {},
-            body: JSON.stringify({
-                'body': 'My Secret !'
-            })
-        }
-
-        const result = await lambda.handler(event);
-
-        const expectedResult = {
-            statusCode: 400,
-            body: JSON.stringify({
-                errors: [{
-                    key: 'x-session-id',
-                    error: 'The session ID is missing.'
-                }]
-            })
-        };
-        expect(result).toEqual(expectedResult);
-    })
-
     it('should store the secret', async () => {
         let event = {
             httpMethod: 'POST',
-            headers: {'x-session-id': '12345-88823-231231'},
+            headers: {},
             body: JSON.stringify({
                 'body': 'My Secret !'
             })

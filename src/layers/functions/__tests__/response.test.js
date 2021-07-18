@@ -1,10 +1,10 @@
 const MockException = require('./MockException')
-const response = require('../response');
+const responseObject = require('../response');
 
 describe('Test response object', function () {
-
     it('it should return 200 status code by default', async () => {
-        response.init()
+        let response = {}
+        Object.assign(response, responseObject)
 
         let actualResponse = response.handle()
 
@@ -23,7 +23,8 @@ describe('Test response object', function () {
     })
 
     it('it can handle ResponseException', async () => {
-        response.init()
+        let response = {}
+        Object.assign(response, responseObject)
 
         let actualResponse = {}
 
@@ -52,7 +53,8 @@ describe('Test response object', function () {
     })
 
     it('should return a response with filled body', async () => {
-        response.init()
+        let response = {}
+        Object.assign(response, responseObject)
 
         let actualResponse = response.handle({
             name: 'Emad Rashdan',

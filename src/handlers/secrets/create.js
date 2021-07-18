@@ -5,25 +5,9 @@ const cuid = require('cuid');
 const {toLowerCase} = require('/opt/utils');
 
 exports.handler = async (event) => {
-    if (event.httpMethod !== 'POST') {
-        throw new Error(`postMethod only accepts POST method, you tried: ${event.httpMethod} method.`);
-    }
-
     event.headers = toLowerCase(event.headers)
 
     let body = JSON.parse(event.body)
-
-    if (!event.headers['x-session-id']) {
-        return {
-            statusCode: 400,
-            body: JSON.stringify({
-                errors: [{
-                    key: 'x-session-id',
-                    error: 'The session ID is missing.'
-                }]
-            })
-        }
-    }
 
     if (!body || !body.body) {
         return {

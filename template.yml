@@ -44,31 +44,6 @@ Resources:
               Access-Control-Allow-Headers: "'*'"
               Access-Control-Allow-Methods: "'*'"
 
-  createSession:
-    Type: AWS::Serverless::Function
-    Properties:
-      CodeUri: src/handlers/sessions/
-      Handler: create.handler
-      AutoPublishAlias: live
-      Description: To create a session for user
-      Policies:
-        - DynamoDBWritePolicy:
-            TableName: !Ref SessionTable
-      Environment:
-        Variables:
-          SESSION_TABLE: !Ref SessionTable
-      Layers:
-        - !Ref NodePackages
-        - !Ref UtilsLayer
-        - !Ref ExceptionsLayer
-      Events:
-        ApiEvent:
-          Type: Api
-          Properties:
-            RestApiId: !Ref ApiGateway
-            Path: /session
-            Method: POST
-
   viewSecret:
     Type: AWS::Serverless::Function
     Properties:
@@ -178,16 +153,6 @@ Resources:
       Description: The exceptions thats exist in secret app
       ContentUri: src/layers/exceptions/
       RetentionPolicy: Retain
-
-  SessionTable:
-    Type: AWS::Serverless::SimpleTable
-    Properties:
-      PrimaryKey:
-        Name: uid
-        Type: String
-      ProvisionedThroughput:
-        ReadCapacityUnits: 2
-        WriteCapacityUnits: 2
 
   SecretTable:
     Type: AWS::Serverless::SimpleTable
