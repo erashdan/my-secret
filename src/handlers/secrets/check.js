@@ -27,7 +27,6 @@ exports.handler = async (event) => {
             throw new SecretLocked
         }
 
-
         return response.handle({
             status: true
         })
