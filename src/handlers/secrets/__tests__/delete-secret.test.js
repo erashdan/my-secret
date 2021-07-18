@@ -27,6 +27,12 @@ describe('Test delete secret', function () {
 
         const expectedResult = {
             statusCode: 200,
+            headers: {
+                'accept': 'application/json',
+                'Access-Control-Allow-Origin': '*',
+                'Access-Control-Allow-Headers': '*',
+                'Access-Control-Allow-Methods': '*'
+            },
             body: JSON.stringify({
                 status: true
             })
