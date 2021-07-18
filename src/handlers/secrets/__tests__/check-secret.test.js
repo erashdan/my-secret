@@ -27,11 +27,16 @@ describe('Test check secret', function () {
 
         const expectedResult = {
             statusCode: 404,
+            headers: {
+                'accept': 'application/json',
+                'Access-Control-Allow-Origin': '*',
+                'Access-Control-Allow-Headers': '*',
+                'Access-Control-Allow-Methods': '*'
+            },
             body: JSON.stringify({
-                errors: [{
-                    key: 'uri',
-                    error: 'The URI is not exist.'
-                }]
+                errors: [
+                    'The URI is not exist'
+                ]
             })
         };
 
@@ -58,7 +63,17 @@ describe('Test check secret', function () {
 
         const expectedResult = {
             statusCode: 204,
-            body: JSON.stringify({})
+            headers: {
+                'accept': 'application/json',
+                'Access-Control-Allow-Origin': '*',
+                'Access-Control-Allow-Headers': '*',
+                'Access-Control-Allow-Methods': '*'
+            },
+            body: JSON.stringify({
+                errors: [
+                    'The secret is deleted'
+                ]
+            })
         };
 
         expect(result).toEqual(expectedResult);
@@ -84,6 +99,12 @@ describe('Test check secret', function () {
 
         const expectedResult = {
             statusCode: 200,
+            headers: {
+                'accept': 'application/json',
+                'Access-Control-Allow-Origin': '*',
+                'Access-Control-Allow-Headers': '*',
+                'Access-Control-Allow-Methods': '*'
+            },
             body: JSON.stringify({
                 status: true
             })
