@@ -13,7 +13,7 @@ exports.handler = async (event) => {
     try {
         const tableQuery = {
             TableName: secretTable,
-            Key: {uri: event.pathParameters.uri}
+            Key: {uri: event.pathParameters.secret}
         };
 
         const data = await docClient.get(tableQuery).promise();

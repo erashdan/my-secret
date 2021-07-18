@@ -10,17 +10,6 @@ let response = {
     },
     body: {},
 
-    init() {
-        this.statusCode = 200
-        this.headers = {
-            'accept': 'application/json',
-            'Access-Control-Allow-Origin': '*',
-            'Access-Control-Allow-Headers': '*',
-            'Access-Control-Allow-Methods': '*'
-        }
-        this.body = {}
-    },
-
     handle(body = null) {
         if (body !== null) {
             this.body = body

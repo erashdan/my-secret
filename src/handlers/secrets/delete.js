@@ -5,7 +5,7 @@ const secretTable = process.env.SECRET_TABLE;
 exports.handler = async (event) => {
     const tableQuery = {
         TableName: secretTable,
-        Key: {uri: event.pathParameters.uri}
+        Key: {uri: event.pathParameters.secret}
     };
 
     await docClient.delete(tableQuery).promise();

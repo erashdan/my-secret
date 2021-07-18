@@ -10,44 +10,106 @@ Globals:
     Timeout: 100
     Runtime: nodejs14.x
     MemorySize: 128
-    Layers:
-      - !Ref UtilsLayer
-      - !Ref ExceptionsLayer
     Environment:
       Variables:
         SECRET_TABLE: !Ref SecretTable
 
 Resources:
+  ApiGateway:
+    Type: AWS::Serverless::Api
+    Properties:
+      StageName: Prod
+      Cors:
+        AllowMethods: "'*'"
+        AllowHeaders: "'*'"
+        AllowOrigin: "'*'"
+      GatewayResponses:
+        UNAUTHORIZED:
+          StatusCode: 401
+          ResponseParameters:
+            Headers:
+              Access-Control-Allow-Origin: "'*'"
+              Access-Control-Allow-Headers: "'*'"
+              Access-Control-Allow-Methods: "'*'"
+        DEFAULT_4XX:
+          ResponseParameters:
+            Headers:
+              Access-Control-Allow-Origin: "'*'"
+              Access-Control-Allow-Headers: "'*'"
+              Access-Control-Allow-Methods: "'*'"
+        DEFAULT_5XX:
+          ResponseParameters:
+            Headers:
+              Access-Control-Allow-Origin: "'*'"
+              Access-Control-Allow-Headers: "'*'"
+              Access-Control-Allow-Methods: "'*'"
+
   createSession:
     Type: AWS::Serverless::Function
     Properties:
       CodeUri: src/handlers/sessions/
       Handler: create.handler
+      AutoPublishAlias: live
       Description: To create a session for user
+      Policies:
+        - DynamoDBWritePolicy:
+            TableName: !Ref SessionTable
       Environment:
         Variables:
           SESSION_TABLE: !Ref SessionTable
       Layers:
         - !Ref NodePackages
+        - !Ref UtilsLayer
+        - !Ref ExceptionsLayer
       Events:
-        Api:
+        ApiEvent:
           Type: Api
           Properties:
+            RestApiId: !Ref ApiGateway
             Path: /session
             Method: POST
+
+  viewSecret:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: src/handlers/secrets/
+      Handler: view.handler
+      AutoPublishAlias: live
+      Description: To view the secret
+      Policies:
+        - DynamoDBReadPolicy:
+            TableName: !Ref SecretTable
+      Layers:
+        - !Ref UtilsLayer
+        - !Ref ExceptionsLayer
+      Events:
+        ApiEvent:
+          Type: Api
+          Properties:
+            RestApiId: !Ref ApiGateway
+            Path: /secret/{secret}
+            Method: GET
+
 
   createSecret:
     Type: AWS::Serverless::Function
     Properties:
       CodeUri: src/handlers/secrets/
       Handler: create.handler
+      AutoPublishAlias: live
       Description: To create a secret for a user
+      Policies:
+        - DynamoDBWritePolicy:
+            TableName: !Ref SecretTable
       Layers:
+        - !Ref UtilsLayer
+        - !Ref ExceptionsLayer
         - !Ref NodePackages
       Events:
-        Api:
+        ApiEvent:
           Type: Api
           Properties:
+            RestApiId: !Ref ApiGateway
             Path: /secret
             Method: POST
 
@@ -56,25 +118,20 @@ Resources:
     Properties:
       CodeUri: src/handlers/secrets/
       Handler: check.handler
+      AutoPublishAlias: live
       Description: To check if the secret is exist and not opened
+      Policies:
+        - DynamoDBReadPolicy:
+            TableName: !Ref SecretTable
+      Layers:
+        - !Ref UtilsLayer
+        - !Ref ExceptionsLayer
       Events:
-        Api:
+        ApiEvent:
           Type: Api
           Properties:
-            Path: /secret/{uri}/check
-            Method: GET
-
-  viewSecret:
-    Type: AWS::Serverless::Function
-    Properties:
-      CodeUri: src/handlers/secrets/
-      Handler: view.handler
-      Description: To view the secret
-      Events:
-        Api:
-          Type: Api
-          Properties:
-            Path: /secret/{uri}
+            RestApiId: !Ref ApiGateway
+            Path: /secret/{secret}/check
             Method: GET
 
   deleteSecret:
@@ -82,12 +139,20 @@ Resources:
     Properties:
       CodeUri: src/handlers/secrets/
       Handler: delete.handler
+      AutoPublishAlias: live
       Description: To delete the secret from database
+      Policies:
+        - DynamoDBCrudPolicy:
+            TableName: !Ref SecretTable
+      Layers:
+        - !Ref UtilsLayer
+        - !Ref ExceptionsLayer
       Events:
-        Api:
+        ApiEvent:
           Type: Api
           Properties:
-            Path: /secret/{uri}
+            RestApiId: !Ref ApiGateway
+            Path: /secret/{secret}
             Method: DELETE
 
   NodePackages:
@@ -101,7 +166,7 @@ Resources:
   UtilsLayer:
     Type: AWS::Serverless::LayerVersion
     Properties:
-      LayerName: my-secret-app-dependencies
+      LayerName: my-secret-utils
       Description: Get the shared utils for cross lambdas
       ContentUri: src/layers/functions/
       RetentionPolicy: Retain
@@ -137,4 +202,4 @@ Resources:
 Outputs:
   WebEndpoint:
     Description: "API Gateway endpoint URL for Prod stage"
-    Value: !Sub "https://${ServerlessRestApi}.execute-api.${AWS::Region}.amazonaws.com/Prod/"
+    Value: !Sub 'https://${ApiGateway}.execute-api.${AWS::Region}.amazonaws.com/${ApiGateway.Stage}/'
